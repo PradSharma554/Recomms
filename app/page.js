@@ -13,6 +13,10 @@ export default async function Home(props) {
   const news = await fetchNewsByCategory(category);
   const session = await auth();
 
+  // const time = session?.expires
+  //   ? new Date(session.expires).toLocaleString()
+  //   : null;
+
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black">
       <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md dark:border-gray-800 dark:bg-black/80">
