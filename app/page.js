@@ -3,6 +3,16 @@ import { auth } from "@/lib/auth"; // Import auth
 import CategoryTabs from "@/components/CategoryTabs";
 import NewsList from "@/components/NewsList";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 // Force dynamic rendering since we are fetching external data and using auth
 export const dynamic = "force-dynamic";
@@ -28,38 +38,47 @@ export default async function Home(props) {
           </div>
           <div className="flex items-center gap-4">
             {session ? (
-              <>
-                <Link
-                  href="/library"
-                  className="text-sm font-medium text-gray-700 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                >
-                  My Library
-                </Link>
-                <div className="h-8 w-8 overflow-hidden rounded-full border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={
-                      session.user.image ||
-                      `https://ui-avatars.com/api/?name=${session.user.name}`
-                    }
-                    alt={session.user.name}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <Link
-                  href="/api/auth/signout"
-                  className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white"
-                >
-                  Logout
-                </Link>
-              </>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-8 w-8 rounded-full"
+                  >
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage
+                        src={session.user.image}
+                        alt={session.user.name}
+                      />
+                      <AvatarFallback>
+                        {session.user.name?.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {session.user.name}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {session.user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/library">My Library</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/api/auth/signout">Log out</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
-              <Link
-                href="/login"
-                className="rounded-full bg-black px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
-              >
-                Login
-              </Link>
+              <Button asChild variant="default">
+                <Link href="/login">Login</Link>
+              </Button>
             )}
           </div>
         </div>

@@ -37,37 +37,45 @@ export default function NewsCard({ article }) {
     };
 
     return (
-        <div className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
-            {article.urlToImage && (
-                <div className="relative h-48 w-full overflow-hidden bg-gray-100">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+        <div className="flex flex-col h-full">
+            <div className="relative h-48 w-full overflow-hidden rounded-t-xl bg-muted">
+                {article.urlToImage ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                         src={article.urlToImage}
                         alt={article.title}
                         className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                     />
+                ) : (
+                    <div className="flex h-full items-center justify-center text-muted-foreground">
+                        No Image
+                    </div>
+                )}
+                <div className="absolute top-2 right-2">
+                    <span className="inline-flex items-center rounded-md border bg-black/50 px-2.5 py-0.5 text-xs font-semibold text-white backdrop-blur-md transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+                        {article.source.name}
+                    </span>
                 </div>
-            )}
-            <div className="flex flex-1 flex-col p-4">
-                <div className="mb-2 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold text-blue-600 dark:text-blue-400">{article.source.name}</span>
+            </div>
+            <div className="flex flex-1 flex-col rounded-b-xl border border-t-0 bg-card text-card-foreground shadow-sm p-6">
+                <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
                     <span>{format(new Date(article.publishedAt), 'dd/MM/yyyy')}</span>
                 </div>
-                <h3 className="mb-2 text-lg font-bold leading-tight text-gray-900 line-clamp-2 dark:text-gray-100">
-                    <a href={article.url} target="_blank" rel="noreferrer" className="hover:underline">
+                <h3 className="mb-2 text-lg font-bold leading-tight tracking-tight line-clamp-2 hover:underline">
+                    <a href={article.url} target="_blank" rel="noreferrer">
                         {article.title}
                     </a>
                 </h3>
-                <p className="mb-4 flex-1 text-sm text-gray-600 line-clamp-3 dark:text-gray-300">
+                <p className="mb-4 flex-1 text-sm text-muted-foreground line-clamp-3">
                     {article.description}
                 </p>
 
-                <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
+                <div className="mt-auto flex items-center justify-between pt-4">
                     <a
                         href={article.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                        className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 text-primary hover:underline h-9 px-0 py-2"
                     >
                         Read More →
                     </a>
@@ -76,9 +84,9 @@ export default function NewsCard({ article }) {
                         <button
                             onClick={handleSave}
                             disabled={loading}
-                            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${isSaved
-                                ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'
+                            className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 ${isSaved
+                                ? "bg-green-100 text-green-900 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400"
+                                : "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
                                 }`}
                         >
                             {loading ? '...' : isSaved ? 'Saved' : 'Save'}
